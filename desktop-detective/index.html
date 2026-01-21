@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop Detective</title>
+    <link rel="stylesheet" href="styles/desktop.css">
+    <link rel="stylesheet" href="styles/apps.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div class="boot-content">
+            <div class="boot-logo">⚖️</div>
+            <h1>FORENSIC ANALYSIS SYSTEM</h1>
+            <p class="boot-subtitle">Remote Desktop Access v2.1</p>
+            <div class="boot-progress">
+                <div class="boot-progress-bar"></div>
+            </div>
+            <p class="boot-status">Connecting to seized device...</p>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="hidden">
+        <div class="menu-container">
+            <h1 class="menu-title">🔍 DESKTOP DETECTIVE</h1>
+            <p class="menu-subtitle">Digital Forensics Division</p>
+
+            <div class="case-files">
+                <h2>CASE FILES</h2>
+                <div class="case-list">
+                    <div class="case-card" data-case="case1">
+                        <div class="case-number">CASE #2024-001</div>
+                        <div class="case-name">The CEO's Last Meeting</div>
+                        <div class="case-desc">Tech startup CEO found dead. Examine the suspect's laptop.</div>
+                        <div class="case-difficulty">Difficulty: ★★☆☆☆</div>
+                    </div>
+                    <div class="case-card locked">
+                        <div class="case-number">CASE #2024-002</div>
+                        <div class="case-name">🔒 Locked</div>
+                        <div class="case-desc">Complete previous case to unlock</div>
+                    </div>
+                    <div class="case-card locked">
+                        <div class="case-number">CASE #2024-003</div>
+                        <div class="case-name">🔒 Locked</div>
+                        <div class="case-desc">Complete previous case to unlock</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Environment -->
+    <div id="desktop" class="hidden">
+        <!-- Case Briefing Overlay -->
+        <div id="case-briefing" class="hidden">
+            <div class="briefing-content">
+                <div class="briefing-header">
+                    <span class="briefing-badge">CLASSIFIED</span>
+                    <h2>CASE BRIEFING</h2>
+                </div>
+                <div class="briefing-body">
+                    <div id="briefing-text"></div>
+                </div>
+                <button id="start-investigation" class="briefing-btn">BEGIN INVESTIGATION</button>
+            </div>
+        </div>
+
+        <!-- Desktop Icons -->
+        <div id="desktop-icons">
+            <div class="desktop-icon" data-app="file-explorer">
+                <div class="icon-image">📁</div>
+                <span>My Files</span>
+            </div>
+            <div class="desktop-icon" data-app="email">
+                <div class="icon-image">📧</div>
+                <span>Email</span>
+            </div>
+            <div class="desktop-icon" data-app="chat">
+                <div class="icon-image">💬</div>
+                <span>Messages</span>
+            </div>
+            <div class="desktop-icon" data-app="photos">
+                <div class="icon-image">🖼️</div>
+                <span>Photos</span>
+            </div>
+            <div class="desktop-icon" data-app="calendar">
+                <div class="icon-image">📅</div>
+                <span>Calendar</span>
+            </div>
+            <div class="desktop-icon" data-app="browser">
+                <div class="icon-image">🌐</div>
+                <span>Browser</span>
+            </div>
+            <div class="desktop-icon" data-app="recycle">
+                <div class="icon-image">🗑️</div>
+                <span>Recycle Bin</span>
+            </div>
+        </div>
+
+        <!-- Windows Container -->
+        <div id="windows-container"></div>
+
+        <!-- Taskbar -->
+        <div id="taskbar">
+            <div id="start-button">
+                <span>🎯 Accuse</span>
+            </div>
+            <div id="taskbar-apps"></div>
+            <div id="system-tray">
+                <span id="clock"></span>
+            </div>
+        </div>
+
+        <!-- Investigator Tools Bar (Outside the OS) -->
+        <div id="investigator-bar">
+            <div class="inv-bar-label">🔬 INVESTIGATOR TOOLS</div>
+            <button id="btn-notes" class="inv-btn">📝 Notes</button>
+            <button id="btn-snip" class="inv-btn">✂️ Snip</button>
+        </div>
+    </div>
+
+
+    <!-- Snipping Tool Overlay -->
+    <div id="snip-overlay" class="hidden">
+        <div class="snip-instructions">Click and drag to capture an area. Press ESC to cancel.</div>
+        <div id="snip-selection"></div>
+    </div>
+
+    <!-- Accusation Modal -->
+    <div id="accusation-modal" class="hidden">
+        <div class="modal-content">
+            <h2>🎯 MAKE YOUR ACCUSATION</h2>
+            <p>Based on your investigation, who committed the murder?</p>
+            <div id="suspect-list"></div>
+            <div class="modal-buttons">
+                <button id="submit-accusation" disabled>Accuse This Person</button>
+                <button id="cancel-accusation">Keep Investigating</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="hidden">
+        <div class="result-content">
+            <div id="result-icon"></div>
+            <h1 id="result-title"></h1>
+            <div id="result-text"></div>
+            <button id="return-menu">Return to Menu</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/case-data.js"></script>
+    <script src="js/window-manager.js"></script>
+    <script src="js/apps/file-explorer.js"></script>
+    <script src="js/apps/email-client.js"></script>
+    <script src="js/apps/chat-app.js"></script>
+    <script src="js/apps/photo-viewer.js"></script>
+    <script src="js/apps/calendar.js"></script>
+    <script src="js/apps/browser-history.js"></script>
+    <script src="js/apps/evidence-board.js"></script>
+    <script src="js/game-manager.js"></script>
+    <script src="js/notes-app.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
