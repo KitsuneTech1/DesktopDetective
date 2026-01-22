@@ -42,6 +42,18 @@ const CASE_DATA = {
             name: "Sam Chen",
             relation: "Victim's Brother",
             description: "Estranged from Marcus. Was recently cut from the family trust."
+        },
+        {
+            id: "maya",
+            name: "Maya Gupta",
+            relation: "Personal Assistant",
+            description: "Marcus's PA for 3 years. Knows his schedule better than anyone. Often stayed late."
+        },
+        {
+            id: "victor",
+            name: "Victor Santino",
+            relation: "The Bookie",
+            description: "A local enforcer with a reputation. Tyler owes him a significant amount of money."
         }
     ],
 
@@ -236,6 +248,42 @@ will collect. One way or another.
 Think carefully about your next move.
 
 [END TRANSCRIPT]`
+                        },
+                        "security_log_mar15.txt": {
+                            type: "file",
+                            icon: "📋",
+                            size: "1.5 KB",
+                            date: "Mar 15, 2024",
+                            content: `SECURITY LOG - MARCH 15, 2024
+Officer: Miller
+
+18:30 - Shift Start. All systems normal.
+18:45 - CFO Tyler Ross arrived. Noted him carrying a travel mug (black/silver).
+19:00 - CEO Marcus Chen meeting with CFO Ross in CEO office.
+19:45 - Loud argument heard from CEO office hallway. Sounded like Mr. Chen was upset about "missing funds."
+19:50 - CFO Ross left CEO office in a hurry. Looked distressed.
+20:00 - Routine patrol of Level 4. Nothing to report.
+21:15 - Cleaning staff (Maria) reported medical emergency in CEO office.
+21:20 - Confirmed Mr. Chen unresponsive. Called 911.`
+                        },
+                        "cleaning_statement_maria.txt": {
+                            type: "file",
+                            icon: "📄",
+                            size: "0.9 KB",
+                            date: "Mar 16, 2024",
+                            content: `WITNESS STATEMENT: Maria Lopez (Cleaning Staff)
+Date: March 16, 2024
+
+I arrived on the 4th floor around 9:00 PM. I usually start with the CEO suite. 
+The door was slightly ajar, which was unusual for Mr. Chen. 
+
+When I entered, I saw him slumped over his desk. At first, I thought he was 
+just sleeping, but then I saw the coffee mug tipped over and he wasn't 
+breathing. I ran to the security desk immediately.
+
+One thing I noticed... there was another travel mug on the side table near the 
+door. It wasn't Mr. Chen's usual one. It was silver and black. By the time the 
+police arrived, I think it was gone. I don't know who took it.`
                         }
                     }
                 }
@@ -578,6 +626,57 @@ Please keep this confidential until our meeting.
 
 Marcus Chen
 CEO, NovaTech Solutions`
+        },
+        {
+            id: "maya_email1",
+            from: "Maya Gupta <maya@novatech.com>",
+            to: "Marcus Chen <marcus@novatech.com>",
+            subject: "Daily Schedule - March 15",
+            date: "March 15, 2024 - 8:30 AM",
+            body: `Good morning Marcus,
+
+Your schedule for today:
+09:00 - Q1 Review Prep
+11:30 - Lunch with Tech Investors
+14:00 - Product Demo - System 7
+16:30 - HR Review (Alex Kim termination appeal)
+19:00 - Private Meeting: Tyler Ross (Conference Room B changed back to Your Office per your request)
+
+I'll be staying until 8:00 PM tonight to finish the board presentation slides. Let me know if you need anything else before I head out.
+
+Maya`
+        },
+        {
+            id: "maya_email2",
+            from: "Maya Gupta <maya@novatech.com>",
+            to: "Tyler Ross <tyler@novatech.com>",
+            subject: "He's onto you",
+            date: "March 14, 2024 - 10:15 PM",
+            body: `Tyler,
+
+We need to be careful. Marcus was asking me about those consulting vouchers today. He knows the signatures don't look right.
+
+I tried to redirect him, but he's smart. He's meeting with you tomorrow at 7. Prepare something convincing or we're both in trouble.
+
+Don't reply to this.
+
+M.`
+        },
+        {
+            id: "victor_email_final",
+            from: "Victor Santino <victor.v@protonmail.com>",
+            to: "Tyler Ross <tyler@novatech.com>",
+            subject: "Clock is ticking",
+            date: "March 14, 2024 - 11:55 PM",
+            body: `Tyler,
+
+I heard Marcus is tightening the belt. That's bad for business.
+
+Remember, my associates don't have the patience I do. If that $347k isn't in the account by the 20th, I can't guarantee your safety. 
+
+Don't disappoint me.
+
+- V`
         }
     ],
 
@@ -645,6 +744,17 @@ CEO, NovaTech Solutions`
                 { sender: "them", text: "I have copies. My lawyer has copies.", time: "March 2, 4:22 PM" },
                 { sender: "me", text: "Is that a threat?", time: "March 2, 4:25 PM" },
                 { sender: "them", text: "It's a fact. See you in court.", time: "March 2, 4:30 PM" }
+            ]
+        },
+        "Maya Gupta": {
+            avatar: "📋",
+            messages: [
+                { sender: "me", text: "Did you move the folders for the audit?", time: "March 13, 5:00 PM" },
+                { sender: "them", text: "Yes, they're in the private vault now.", time: "March 13, 5:05 PM" },
+                { sender: "them", text: "Marcus was asking about the Cayman transfers again.", time: "March 13, 5:06 PM" },
+                { sender: "me", text: "What did you tell him?", time: "March 13, 5:10 PM" },
+                { sender: "them", text: "The truth... that they were for the new server farm.", time: "March 13, 5:12 PM" },
+                { sender: "them", text: "He didn't look like he believed me.", time: "March 13, 5:15 PM" }
             ]
         }
     },

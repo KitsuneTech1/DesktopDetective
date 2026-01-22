@@ -1,0 +1,22 @@
+{
+    "name": "desktop-detective-game",
+    "version": "1.0.0",
+    "description": "Desktop Detective - Digital Forensics Game Demo",
+    "main": "index.html",
+    "scripts": {
+        "start": "npx serve .",
+        "build": "echo 'Building... Done'",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d ."
+    },
+    "keywords": [
+        "game",
+        "detective",
+        "forensics"
+    ],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "gh-pages": "^6.1.1"
+    }
+}
