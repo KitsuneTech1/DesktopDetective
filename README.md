@@ -66,6 +66,4 @@ There's no evidence-count gate stopping you from accusing early. The case briefi
 
 ## License
 
-PolyForm Noncommercial License 1.0.0. Copyright (c) 2026 Kitsune Technologies LLC.
-
-In short: you can use, copy, modify, and distribute this for any noncommercial purpose (personal use, research, education, hobby projects, nonprofit and government use), with no anticipated commercial application. Commercial use is not covered by this license. Full text is in [LICENSE.md](LICENSE.md), or see the license at https://polyformproject.org/licenses/noncommercial/1.0.0.
+MIT. See [LICENSE.md](LICENSE.md).
