@@ -1,63 +1,36 @@
-# Agent Guide for Desktop Detective
+# Agent guide for Desktop Detective
 
 ## Orientation
 
-Desktop Detective is a static browser game with no backend, no framework, and no build step. All logic is vanilla JavaScript split across modules in `desktop-detective/js/`. The entry point is `desktop-detective/index.html`. Game narrative data lives in `desktop-detective/js/case-data.js`.
+Desktop Detective is a static browser game. There is no server, no database, no build step, and no framework. The entire application is HTML, CSS, and vanilla JS inside the `desktop-detective/` directory. The entry point is `index.html`. All case content is a single JS object in `js/case-data.js`. The game simulates a desktop with draggable windows, each window being an app that renders its slice of the case data.
 
 ## How to run and test
 
-Serve the `desktop-detective/` directory with any static file server:
+Start a local server from the `desktop-detective/` directory:
 
 ```bash
 cd desktop-detective
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000` in a browser. There are no automated tests. Manual testing means playing through the case: open apps, read content, take notes, make an accusation, verify win and lose screens.
+Then open `http://localhost:8000` in a browser. There are no automated tests. Manual testing means clicking through the case, opening every app, taking notes, using the snipping tool, and making an accusation.
 
-## What an agent must know to work safely here
+## What an agent must know to work here safely
 
-### 1. This is a narrative game, not a production app
+- **Do not add a build step.** The project is intentionally zero-build. The `build` script in `package.json` is a no-op placeholder. Keep it that way.
+- **Case data is the single source of truth.** All narrative content lives in `js/case-data.js`. When adding a new case, follow the exact shape of `CASE_2024_001`. The game manager and app modules read from that shape.
+- **The two locked case slots are placeholders.** They are hardcoded in `js/game-manager.js`. Unlocking them means adding real case data and updating the menu logic, not just flipping a flag.
+- **localStorage is used for notes only.** The notes app saves text under a case-scoped key. Do not store game state or progress there unless you also update the game manager to read it.
+- **The snipping tool needs the CDN.** `html2canvas` is loaded from `cdnjs.cloudflare.com` in `index.html`. If you vendor it, update the script tag.
+- **No secrets exist.** There is no `.env` file, no API keys, no authentication. Do not introduce any.
+- **The evidence board app is present but not wired in.** `js/apps/evidence-board.js` exists. It is not part of the main case flow for CASE #2024-001. If you integrate it, you will need to add evidence board data to the case object and create a window for it in the window manager.
 
-All "bugs" related to story consistency are by design. Red herrings, contradicting alibis, and misleading clues are intentional. Do not "fix" narrative inconsistencies unless explicitly asked.
+## Common call shape
 
-### 2. Case data is the single source of truth
+There is no API or MCP server. All interaction is through the DOM. The window manager is the central hub for creating app windows. The pattern for opening an app is:
 
-`case-data.js` contains all game content. If you add a new case, follow the existing structure exactly. The `killer` field is an index into the `suspects` array. The `hints` object maps suspect indices to hint strings. The `solution` field is HTML shown on the win screen.
+1. A desktop icon or taskbar button calls `windowManager.createWindow(appName, title, contentElement)`.
+2. The app module builds a DOM element and returns it.
+3. The window manager wraps it in a draggable window chrome and adds it to the desktop.
 
-### 3. Window management is fragile
-
-`window-manager.js` handles z-index, dragging, resizing, minimize, maximize, and close. Windows are absolutely positioned divs. Changing the desktop layout CSS can break window positioning. Test window behavior after any CSS changes to `desktop.css` or `apps.css`.
-
-### 4. Notes are the only persisted state
-
-`notes-app.js` uses `localStorage` with keys like `desktop-detective-notes-case-2024-001`. Everything else is in-memory and lost on refresh. If you add save/load for game progress, you will need to serialize the full game state.
-
-### 5. The snipping tool depends on an external CDN
-
-`index.html` loads `html2canvas` from `cdnjs.cloudflare.com`. If you modify the snipping feature, keep the CDN dependency in mind. Do not bundle it without updating the script tag.
-
-### 6. No framework, no module system
-
-Scripts are loaded via `<script>` tags in `index.html` and attach to the global `window` object. There is no import/export, no bundler, no package manager for runtime dependencies. `package.json` only exists for the `serve` and `gh-pages` dev scripts.
-
-### 7. Adding a new case
-
-To add a playable case:
-
-1. Add a new case object to `case-data.js` following the existing structure.
-2. Update `game-manager.js` to register the new case in the case selection flow.
-3. Update the main menu markup in `index.html` to make the case slot clickable.
-4. Populate all data fields: `fileSystem`, `emails`, `chats`, `photos`, `calendarEvents`, `browserHistory`, `bookmarks`, `recycleBin`, `suspects`, `killer`, `solution`, `hints`.
-
-### 8. Common call shape
-
-There is no API or MCP server. All interactions are DOM events. The main entry points for programmatic interaction are:
-
-- `GameManager.startCase(caseId)` - Begins a case investigation
-- `GameManager.makeAccusation(suspectIndex)` - Triggers win/lose flow
-- `WindowManager.openWindow(appName, title, content)` - Opens a new window
-- `NotesApp.saveNotes(text)` - Persists notes to localStorage
-- `NotesApp.loadNotes()` - Reads notes from localStorage
-
-These are attached to `window` and can be called from the browser console for testing.
+If you need to programmatically trigger an accusation for testing, call the relevant method on the `gameManager` instance, which is created in `js/main.js`.
