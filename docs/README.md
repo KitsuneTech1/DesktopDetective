@@ -1,24 +1,23 @@
 # Desktop Detective
 
-A browser murder-mystery where the crime scene is a suspect's laptop and the evidence is buried in their emails, chats, and files.
+A browser-based murder-mystery game where you investigate a crime by digging through a simulated suspect's laptop.
 
 ## Why this exists
 
-Desktop Detective is an early-stage experiment in narrative-driven investigation games that run entirely in the browser. There is one complete case, one case file format, and a desktop simulation that ties it together. The project is a foundation for writing and shipping more cases without changing the engine.
+Desktop Detective is an experiment in narrative-driven investigation games that run entirely in the browser with no backend. The goal is to make a mystery that rewards careful reading and cross-referencing across multiple simulated apps, rather than puzzle minigames or inventory combinations. The project is in early stages: one case is playable, and the structure is in place for more.
 
 ## Features
 
-- Simulated desktop with draggable, resizable windows
-- Seven interactive apps: file explorer, email client, chat app, photo viewer, calendar, browser (history and bookmarks), and recycle bin
-- One complete case, "The CEO's Last Meeting" (CASE #2024-001), with six suspects and a single correct accusation
-- Investigator tools: a persistent notepad saved to browser local storage, and a snipping tool for capturing screen regions
-- Accusation screen with win and lose states, including a full solution reveal and a hint on wrong guesses
-- Two locked case slots on the main menu as placeholders for future content
-- Static HTML/CSS/JS, no build step required
+- Simulated desktop environment with draggable, resizable windows
+- Seven interactive apps: file explorer, email client, messaging app, photo viewer, calendar, browser (history and bookmarks), and recycle bin
+- One complete case, "The CEO's Last Meeting" (CASE #2024-001), with six suspects and a full narrative spread across all apps
+- Built-in investigator tools: a notepad that persists to browser local storage, and a snipping tool for capturing evidence screenshots
+- Accusation system with win and lose screens, including a full solution breakdown on a correct accusation
+- Runs as static HTML/CSS/JS with no build step or server required
 
 ## Quickstart
 
-Open the file directly:
+### Open directly
 
 ```bash
 open desktop-detective/index.html      # macOS
@@ -26,7 +25,7 @@ xdg-open desktop-detective/index.html  # Linux
 start desktop-detective\index.html     # Windows
 ```
 
-Or serve it locally (recommended):
+### Local web server (recommended)
 
 ```bash
 cd desktop-detective
@@ -35,7 +34,7 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-With npm:
+### npm scripts
 
 ```bash
 cd desktop-detective
@@ -43,11 +42,11 @@ npm install
 npm start
 ```
 
-`npm start` runs `npx serve .`. The `build` script is a no-op placeholder. `npm run deploy` publishes the folder to a `gh-pages` branch via the `gh-pages` package.
+`npm start` runs `npx serve .` and serves the folder on a local port. There is no real build step; `npm run build` is a placeholder. `npm run deploy` publishes to a `gh-pages` branch via the `gh-pages` package.
 
 ## Configuration
 
-No environment variables are required. The game is static and reads no `.env` file. The snipping tool loads `html2canvas` from a CDN (`cdnjs.cloudflare.com`) via a script tag in `index.html`, so that feature needs an internet connection.
+No environment variables or configuration files are required. The game is static and self-contained. The snipping tool loads `html2canvas` from a CDN (`cdnjs.cloudflare.com`), so that feature needs an internet connection.
 
 ## License
 

@@ -1,63 +1,103 @@
-# Desktop Detective technical reference
+# Desktop Detective Technical Reference
 
 ## Architecture
 
-Desktop Detective is a single-page application built with vanilla HTML, CSS, and JavaScript. There is no framework, no build pipeline, and no server-side component. The entry point is `desktop-detective/index.html`, which loads styles from `styles/desktop.css` and `styles/apps.css`, and scripts from `js/main.js` and several app modules.
+Desktop Detective is a single-page static web application with no backend. All game logic runs in the browser.
 
-Key files and their roles:
+### File structure
 
-- `desktop-detective/index.html` - shell markup for the desktop, taskbar, main menu, and accusation screen.
-- `desktop-detective/js/main.js` - boot sequence: initializes the window manager, game manager, and desktop icons.
-- `desktop-detective/js/window-manager.js` - creates, drags, resizes, focuses, minimizes, and closes windows. Every app window is managed here.
-- `desktop-detective/js/game-manager.js` - handles case selection, accusation logic, win/lose screens, and the main menu flow.
-- `desktop-detective/js/case-data.js` - contains all case content as a JavaScript object. Currently holds one case, `CASE_2024_001`.
-- `desktop-detective/js/apps/file-explorer.js` - renders a tree of folders and files from case data.
-- `desktop-detective/js/apps/email-client.js` - renders an inbox, sent items, and individual email threads.
-- `desktop-detective/js/apps/chat-app.js` - renders direct-message conversation logs.
-- `desktop-detective/js/apps/photo-viewer.js` - displays images with captions from case data.
-- `desktop-detective/js/apps/calendar.js` - renders a month-view calendar with dated events.
-- `desktop-detective/js/apps/browser-history.js` - shows search history and a bookmarks bar.
-- `desktop-detective/js/apps/evidence-board.js` - a corkboard-style view for pinning evidence (currently referenced but not fully wired into the main case flow).
-- `desktop-detective/js/notes-app.js` - a notepad that persists text to `localStorage`.
-- `desktop-detective/js/help-overlay.js` - an overlay with keyboard shortcuts and instructions.
-- `desktop-detective/js/pause-menu.js` - an in-game pause menu.
-- `desktop-detective/package.json` - npm metadata, scripts (`start`, `build`, `deploy`), and a single dependency (`gh-pages` for deployment).
-- `desktop-detective/package-lock.json` - lockfile for the `gh-pages` dependency.
+```
+desktop-detective/
+  index.html              # Entry point, loads all scripts and styles
+  js/
+    main.js               # Boot sequence, desktop icon setup, taskbar wiring
+    game-manager.js       # Case selection, accusation flow, win/lose screens
+    window-manager.js     # Window creation, dragging, resizing, z-index, minimize/maximize/close
+    case-data.js          # All narrative content for CASE #2024-001
+    apps/
+      file-explorer.js    # My Files app: folder tree and file contents
+      email-client.js     # Email app: inbox list and email thread view
+      chat-app.js         # Messages app: contact list and DM conversation view
+      photo-viewer.js     # Photos app: thumbnail grid and full-size viewer
+      calendar.js         # Calendar app: month grid with dated events
+      browser-history.js  # Browser app: search history and bookmarks
+      evidence-board.js   # Evidence board (unused in current case)
+    notes-app.js          # Investigator notepad with local storage persistence
+    help-overlay.js       # Help overlay content
+    pause-menu.js         # Pause menu (settings, return to menu)
+  styles/
+    desktop.css           # Desktop, taskbar, window chrome, icons
+    apps.css              # App-specific interior styling
+  package.json            # npm scripts for serving and deploying
+```
 
-## API / CLI / MCP tools
+### Data flow
 
-Desktop Detective does not expose an API, CLI, or MCP server. It is a client-side browser application with no backend. All interaction happens through the graphical desktop interface.
+1. `index.html` loads all scripts and styles, then calls `window.initDesktop()` from `main.js`.
+2. `main.js` renders desktop icons and wires their double-click handlers to `windowManager.openApp()`.
+3. `windowManager.openApp()` creates a window div and calls the corresponding app init function (e.g., `initFileExplorer()`), passing the window element.
+4. Each app function populates its window with HTML generated from the data in `case-data.js`.
+5. `game-manager.js` handles the accusation screen. When the player accuses a suspect, it compares against the correct answer defined in `case-data.js` and shows the win or lose screen.
+6. `notes-app.js` reads and writes to `localStorage` under a key specific to the case.
+
+## API / CLI / MCP Tools
+
+Desktop Detective has no API, CLI, or MCP server. It is a client-only browser application.
 
 ## Configuration
 
-There are no environment variables. The application is fully static. The only external dependency is `html2canvas`, loaded at runtime from `cdnjs.cloudflare.com` via a `<script>` tag in `index.html`. If that CDN is unreachable, the snipping tool will fail silently.
+No environment variables. No configuration files. The application is entirely static.
+
+The snipping tool depends on `html2canvas` loaded from:
+```
+https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js
+```
+This script tag is in `index.html`. The snipping feature will fail if the CDN is unreachable.
 
 ## Data model
 
-All case data lives in `desktop-detective/js/case-data.js` as a single exported object. The structure for the one existing case (`CASE_2024_001`) is:
+All case content lives in `desktop-detective/js/case-data.js`. The file exports a single `caseData` object with this shape:
 
-- `id`, `title`, `briefing` (case overview text)
-- `suspects` - array of objects with `name`, `relation`, and `guilty` (boolean, exactly one is `true`)
-- `solution` - object with `killer`, `motive`, and `method` strings shown on the win screen
-- `hint` - string shown on the lose screen
-- `apps` - object containing data for each desktop app:
-  - `files` - nested folder/file tree with `name`, `type` (`file` or `folder`), `content` (string), and `children` (array for folders)
-  - `emails` - array of email thread objects with `subject`, `from`, `to`, `date`, `body`, and `folder` (`inbox` or `sent`)
-  - `messages` - array of chat conversation objects with `participants`, and a `messages` array of `{from, text, time}`
-  - `photos` - array of `{src, caption}`
-  - `calendar` - object with `month`, `year`, and an `events` array of `{day, title, description}`
-  - `browser` - object with `history` (array of `{query, date}`) and `bookmarks` (array of `{title, url}`)
-  - `recycleBin` - array of deleted file objects with `name` and `content`
+- `caseData.title` - Case display name
+- `caseData.briefing` - HTML string shown on the case intro screen
+- `caseData.suspects` - Array of objects with `id`, `name`, `relation`, and `isGuilty` (boolean)
+- `caseData.solution` - HTML string shown on the win screen
+- `caseData.hints` - Object mapping suspect IDs to hint strings shown on lose screens
+- `caseData.apps` - Object containing all app content:
+  - `fileExplorer` - Folder tree with files, each file has `name` and `content` (HTML string)
+  - `emailClient` - Array of email thread objects with `subject`, `participants`, and `messages` (array of `{from, to, date, body}`)
+  - `chatApp` - Array of contact objects with `name` and `messages` (array of `{sender, text, time}`)
+  - `photoViewer` - Array of photo objects with `src`, `caption`, and `date`
+  - `calendar` - Object with month/year and `events` array (`{date, title, description}`)
+  - `browserHistory` - Object with `history` array and `bookmarks` array
+  - `recycleBin` - Array of deleted file objects with `name` and `content`
 
-The notes app stores its content in `localStorage` under a key derived from the case ID, so notes persist across browser sessions but are scoped per case.
+Notes are stored in `localStorage` under a key derived from the case ID.
 
 ## Deploy
 
-GitHub Pages is the intended deployment target. The `deploy` script in `package.json` runs `gh-pages -d .` from the `desktop-detective/` directory, which pushes the folder contents to a `gh-pages` branch. Alternatively, configure GitHub Pages to serve from the `/desktop-detective` folder on the main branch. No build step is required.
+### GitHub Pages
+
+Point GitHub Pages at the `desktop-detective/` folder (Settings > Pages > deploy from branch, folder `/desktop-detective`). No build step is needed.
+
+### Any static host
+
+Serve the contents of `desktop-detective/` from any static file server (Netlify, Vercel, S3, nginx, etc.). The entry point is `index.html`.
+
+### npm deploy
+
+```bash
+cd desktop-detective
+npm run deploy
+```
+
+This runs `gh-pages -d .` and publishes the folder to the `gh-pages` branch of the repository.
 
 ## Gotchas
 
-- The snipping tool depends on `html2canvas` loaded from a CDN. It will not work offline unless you vendor that library.
-- Opening `index.html` directly via `file://` may cause issues with `localStorage` or cross-origin restrictions in some browsers. A local server is recommended.
-- The two locked case slots on the main menu are hardcoded placeholders. Adding a new case requires adding an entry to the case data object and updating the menu logic in `game-manager.js`.
-- The evidence board app (`evidence-board.js`) exists in the codebase but is not fully integrated into the main case flow for CASE #2024-001.
+- The snipping tool requires an internet connection to load `html2canvas` from CDN. Everything else works fully offline.
+- Opening `index.html` directly via `file://` may cause issues with localStorage or font loading in some browsers. A local server is recommended.
+- The evidence board app (`evidence-board.js`) exists in the codebase but is not wired into the current case. It is a placeholder for future use.
+- Two locked case slots appear on the main menu but have no associated data or logic. They are UI placeholders.
+- There is no evidence-count enforcement. The accusation screen is always accessible regardless of how much the player has explored.
+- Notes are scoped to the current case in localStorage. Clearing browser data will delete them.
