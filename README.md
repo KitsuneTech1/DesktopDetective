@@ -4,7 +4,7 @@
 
 A browser-based murder mystery where you investigate a suspect's computer for clues.
 
-Play it in your browser, no install: **[kitsunetech1.github.io/DesktopDetective](https://kitsunetech1.github.io/DesktopDetective/)**
+Play it in your browser, no install: **[kitsunetechnologies.org/play/desktop-detective](https://kitsunetechnologies.org/play/desktop-detective/)**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow.svg)](https://github.com/KitsuneTech1/DesktopDetective)
