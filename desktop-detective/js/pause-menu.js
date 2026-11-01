@@ -143,10 +143,13 @@ class PauseMenu {
         const snipOverlay = document.getElementById('snip-overlay');
         const accusationModal = document.getElementById('accusation-modal');
         const notesOverlay = document.getElementById('notes-overlay');
+        const notesWindowOpen = typeof windowManager !== 'undefined' &&
+            windowManager.windows?.has('investigator-notes');
         
         if (snipOverlay && !snipOverlay.classList.contains('hidden')) return;
         if (accusationModal && !accusationModal.classList.contains('hidden')) return;
         if (notesOverlay && !notesOverlay.classList.contains('hidden')) return;
+        if (notesWindowOpen) return;
         
         this.isPaused = !this.isPaused;
         
@@ -180,10 +183,10 @@ class PauseMenu {
         document.getElementById('main-menu').classList.remove('hidden');
         
         // Close all windows and reset game
-        if (window.windowManager) {
+        if (typeof windowManager !== 'undefined') {
             windowManager.closeAllWindows();
         }
-        if (window.gameManager) {
+        if (typeof gameManager !== 'undefined') {
             gameManager.reset();
         }
     }

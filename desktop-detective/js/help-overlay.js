@@ -110,7 +110,10 @@ class HelpOverlay {
 
         // Don't show if notes overlay is visible
         const notesOverlay = document.getElementById('notes-overlay');
+        const notesWindowOpen = typeof windowManager !== 'undefined' &&
+            windowManager.windows?.has('investigator-notes');
         if (notesOverlay && !notesOverlay.classList.contains('hidden')) return;
+        if (notesWindowOpen) return;
 
         if (this.isVisible) {
             this.hide();
