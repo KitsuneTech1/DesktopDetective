@@ -178,6 +178,14 @@ test('all local script references in the entry point exist', () => {
     }
 });
 
+test('npm quickstart uses the bundled local server without dependencies', () => {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(projectDir, 'package.json'), 'utf8'));
+    assert.equal(packageJson.scripts.start, 'node scripts/serve.js');
+    assert.equal(Object.hasOwn(packageJson, 'dependencies'), false);
+    assert.equal(Object.hasOwn(packageJson, 'devDependencies'), false);
+    assert.equal(fs.existsSync(path.join(projectDir, 'scripts', 'serve.js')), true);
+});
+
 const failures = [];
 for (const [name, run] of tests) {
     try {

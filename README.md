@@ -41,7 +41,7 @@ npm install
 npm start
 ```
 
-`npm start` runs `npx serve .` and serves the folder on a local port. The `build` script in package.json is a no-op placeholder (just echoes "Building... Done"), there's no real bundling step, the game runs directly from source. `npm run deploy` is wired to `gh-pages -d .` for publishing the folder straight to a `gh-pages` branch if you want to host it that way.
+`npm start` runs a small local server using Node's standard library and serves the folder at `http://127.0.0.1:8000`. It does not download a server package. The `build` script is a no-op placeholder that echoes "Building... Done". There is no bundling step, the game runs directly from source.
 
 To run the offline test suite, use:
 
@@ -54,7 +54,7 @@ The tests use Node's built-in assertion support and do not access the network.
 
 **Option 4: GitHub Pages**
 
-Since there's no build step, you can point GitHub Pages straight at the `desktop-detective/` folder (Settings > Pages > deploy from branch, folder `/desktop-detective`), or copy its contents to the repo root or a `docs/` folder if your Pages setup expects that.
+Since there's no build step, you can point GitHub Pages straight at the `desktop-detective/` folder (Settings > Pages > deploy from branch, folder `/desktop-detective`), or copy its contents to the repo root or a `docs/` folder if your Pages setup expects that. This repository does not include a deployment command.
 
 Note: the snipping tool (see below) pulls `html2canvas` from a CDN (`cdnjs.cloudflare.com`) via a script tag in `index.html`, so that one feature needs an internet connection even when everything else runs fully offline.
 

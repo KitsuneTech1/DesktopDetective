@@ -4,11 +4,9 @@
     "description": "Desktop Detective - Digital Forensics Game Demo",
     "main": "index.html",
     "scripts": {
-        "start": "npx serve .",
+        "start": "node scripts/serve.js",
         "build": "echo 'Building... Done'",
-        "test": "node test/game-manager.test.js",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d ."
+        "test": "node test/game-manager.test.js"
     },
     "keywords": [
         "game",
@@ -16,8 +14,5 @@
         "forensics"
     ],
     "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "gh-pages": "^6.1.1"
-    }
+    "license": "MIT"
 }
