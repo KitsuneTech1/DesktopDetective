@@ -101,7 +101,7 @@ body {
 }
 
 .boot-status {
-    color: var(--text-dim);
+    color: #9a9aa8;
     font-size: 12px;
 }
 
@@ -1439,3 +1439,5 @@ body {
     font-size: 11px;
     color: #4ade80;
 }
+.skip-link { position: absolute; left: -9999px; top: 8px; z-index: 10000; background: #111; color: #fff; padding: 8px 12px; border-radius: 4px; }
+.skip-link:focus { left: 8px; }
