@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node scripts/serve.js",
         "build": "echo 'Building... Done'",
-        "test": "node test/game-manager.test.js"
+        "test": "node test/game-manager.test.js && node test/review.test.js"
     },
     "keywords": [
         "game",

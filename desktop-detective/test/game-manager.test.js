@@ -166,6 +166,18 @@ test('wrong accusation identifies the innocent suspect', () => {
     assert.match(elements['result-text'].innerHTML, /An innocent person was accused/);
 });
 
+test('game actions are safe before a case has loaded', () => {
+    const elements = createElements();
+    const GameManager = loadGameManager(elements);
+    const manager = new GameManager();
+
+    assert.doesNotThrow(() => manager.openApp('email'));
+    assert.doesNotThrow(() => manager.openRecycleBin());
+    assert.doesNotThrow(() => manager.openAccusationModal());
+    assert.doesNotThrow(() => manager.submitAccusation());
+    assert.equal(elements['accusation-modal'].classList.contains('hidden'), true);
+});
+
 test('all local script references in the entry point exist', () => {
     const html = fs.readFileSync(path.join(projectDir, 'index.html'), 'utf8');
     const scriptSources = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)]

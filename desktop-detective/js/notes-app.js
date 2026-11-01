@@ -1,5 +1,33 @@
 // Investigator Notes App - Obsidian-style with sidebar and real screenshot capture
 
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[character]));
+}
+
+function normaliseNotes(value) {
+    if (!Array.isArray(value)) return [];
+
+    return value.flatMap(note => {
+        if (!note || typeof note !== 'object' || note.id === undefined || note.id === null) {
+            return [];
+        }
+
+        return [{
+            id: String(note.id),
+            title: typeof note.title === 'string' ? note.title : 'Untitled',
+            content: typeof note.content === 'string' ? note.content : '',
+            created: typeof note.created === 'string' ? note.created : new Date().toISOString(),
+            updated: typeof note.updated === 'string' ? note.updated : new Date().toISOString()
+        }];
+    });
+}
+
 class NotesApp {
     constructor() {
         this.notes = [];
@@ -33,7 +61,7 @@ class NotesApp {
         try {
             const saved = localStorage.getItem('detective_notes');
             if (saved) {
-                this.notes = JSON.parse(saved);
+                this.notes = normaliseNotes(JSON.parse(saved));
             }
         } catch (e) {
             this.notes = [];
@@ -180,16 +208,16 @@ class NotesApp {
                     </div>
                     <div class="obsidian-note-list">
                         ${this.notes.map(note => `
-                            <div class="obsidian-note-item ${note.id === this.activeNoteId ? 'active' : ''}" data-id="${note.id}">
+                            <div class="obsidian-note-item ${note.id === this.activeNoteId ? 'active' : ''}" data-id="${escapeHtml(note.id)}">
                                 <span class="note-icon">📄</span>
-                                <span class="note-name">${note.title || 'Untitled'}</span>
+                                <span class="note-name">${escapeHtml(note.title || 'Untitled')}</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>
                 <div class="obsidian-editor">
                     <div class="obsidian-editor-header">
-                        <input type="text" class="obsidian-title" value="${currentNote.title}" placeholder="Note title...">
+                        <input type="text" class="obsidian-title" value="${escapeHtml(currentNote.title)}" placeholder="Note title...">
                         <button class="obsidian-delete" title="Delete note">🗑️</button>
                     </div>
                     <div class="obsidian-content" contenteditable="true" placeholder="Start typing your investigation notes...">${currentNote.content}</div>
@@ -244,9 +272,9 @@ class NotesApp {
     updateSidebar(windowEl) {
         const list = windowEl.querySelector('.obsidian-note-list');
         list.innerHTML = this.notes.map(note => `
-            <div class="obsidian-note-item ${note.id === this.activeNoteId ? 'active' : ''}" data-id="${note.id}">
+            <div class="obsidian-note-item ${note.id === this.activeNoteId ? 'active' : ''}" data-id="${escapeHtml(note.id)}">
                 <span class="note-icon">📄</span>
-                <span class="note-name">${note.title || 'Untitled'}</span>
+                <span class="note-name">${escapeHtml(note.title || 'Untitled')}</span>
             </div>
         `).join('');
 
@@ -434,6 +462,12 @@ class NotesApp {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    window.notesApp = new NotesApp();
-});
+if (typeof module !== 'undefined') {
+    module.exports = { NotesApp, escapeHtml, normaliseNotes };
+}
+
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        window.notesApp = new NotesApp();
+    });
+}

@@ -24,24 +24,26 @@ class GameManager {
     }
 
     openApp(appId) {
+        if (!this.currentCase) return;
+
         switch (appId) {
             case 'file-explorer':
-                this.apps.fileExplorer.open();
+                this.apps.fileExplorer?.open();
                 break;
             case 'email':
-                this.apps.email.open();
+                this.apps.email?.open();
                 break;
             case 'chat':
-                this.apps.chat.open();
+                this.apps.chat?.open();
                 break;
             case 'photos':
-                this.apps.photos.open();
+                this.apps.photos?.open();
                 break;
             case 'calendar':
-                this.apps.calendar.open();
+                this.apps.calendar?.open();
                 break;
             case 'browser':
-                this.apps.browser.open();
+                this.apps.browser?.open();
                 break;
             case 'recycle':
                 this.openRecycleBin();
@@ -55,6 +57,8 @@ class GameManager {
     }
 
     openRecycleBin() {
+        if (!this.currentCase) return;
+
         const recycledFiles = this.currentCase.recycledFiles || [];
         const html = `
             <div class="file-list" style="padding: 15px;">
@@ -106,6 +110,8 @@ class GameManager {
     }
 
     openAccusationModal() {
+        if (!this.currentCase) return;
+
         const modal = document.getElementById('accusation-modal');
         const suspectList = document.getElementById('suspect-list');
         const submitBtn = document.getElementById('submit-accusation');
@@ -157,6 +163,8 @@ class GameManager {
     }
 
     submitAccusation() {
+        if (!this.currentCase || !this.selectedSuspect) return;
+
         const isCorrect = this.selectedSuspect === this.currentCase.killer;
         document.getElementById('accusation-modal').classList.add('hidden');
         this.showResult(isCorrect);

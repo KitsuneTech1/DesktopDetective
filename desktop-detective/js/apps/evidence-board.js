@@ -67,8 +67,11 @@ class EvidenceBoard {
         }
 
         // Update taskbar evidence count
-        document.getElementById('evidence-count').textContent =
-            `Evidence: ${this.collectedEvidence.length}/${this.requiredEvidence}`;
+        const evidenceCount = document.getElementById('evidence-count');
+        if (evidenceCount) {
+            evidenceCount.textContent =
+                `Evidence: ${this.collectedEvidence.length}/${this.requiredEvidence}`;
+        }
     }
 
     bindEvents(windowEl) {
