@@ -108,6 +108,10 @@ class GameManager {
     openAccusationModal() {
         const modal = document.getElementById('accusation-modal');
         const suspectList = document.getElementById('suspect-list');
+        const submitBtn = document.getElementById('submit-accusation');
+
+        this.selectedSuspect = null;
+        submitBtn.disabled = true;
 
         // Render suspects
         suspectList.innerHTML = this.currentCase.suspects.map(s => `

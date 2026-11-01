@@ -6,6 +6,7 @@
     "scripts": {
         "start": "npx serve .",
         "build": "echo 'Building... Done'",
+        "test": "node test/game-manager.test.js",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d ."
     },

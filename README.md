@@ -43,6 +43,15 @@ npm start
 
 `npm start` runs `npx serve .` and serves the folder on a local port. The `build` script in package.json is a no-op placeholder (just echoes "Building... Done"), there's no real bundling step, the game runs directly from source. `npm run deploy` is wired to `gh-pages -d .` for publishing the folder straight to a `gh-pages` branch if you want to host it that way.
 
+To run the offline test suite, use:
+
+```bash
+cd desktop-detective
+npm test --offline
+```
+
+The tests use Node's built-in assertion support and do not access the network.
+
 **Option 4: GitHub Pages**
 
 Since there's no build step, you can point GitHub Pages straight at the `desktop-detective/` folder (Settings > Pages > deploy from branch, folder `/desktop-detective`), or copy its contents to the repo root or a `docs/` folder if your Pages setup expects that.
