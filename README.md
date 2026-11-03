@@ -6,6 +6,7 @@ A browser-based murder mystery where you investigate a suspect's computer for cl
 
 Play it in your browser, no install: **[kitsunetechnologies.org/play/desktop-detective](https://kitsunetechnologies.org/play/desktop-detective/)**
 
+[![Build Status](https://github.com/KitsuneTech1/DesktopDetective/actions/workflows/ci.yml/badge.svg)](https://github.com/KitsuneTech1/DesktopDetective/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow.svg)](https://github.com/KitsuneTech1/DesktopDetective)
 
@@ -69,6 +70,19 @@ Point Pages at the `desktop-detective/` folder (Settings > Pages > deploy from b
 7. Win or lose: correct accusation shows the full solution; wrong accusation hints at the real trail and lets you retry.
 
 No evidence gate. The briefing suggests gathering 3 pieces of supporting evidence, but you can accuse at any time.
+
+
+## Architecture & Data Flow
+
+```mermaid
+flowchart TD
+    A[Start Case: Simulated Suspect Desktop OS] --> B[Investigate Files, Emails, Browser History, Trash]
+    B --> C[Corroborate Timestamps & Clues]
+    C --> D[Compile Evidence Board & Suspect Dossiers]
+    D --> E[Make Accusation in Final Interview]
+    E -->|Correct Killer| F[Case Closed: Victory & Breakdown]
+    E -->|Wrong Suspect| G[Case Cold: Innocent Accused]
+```
 
 ## License
 
