@@ -47,7 +47,12 @@ function resolveFilePath(requestUrl, rootDirectory = root) {
         throw new URIError('Invalid request path');
     }
 
-    const relativePath = requestPath === '/' ? 'index.html' : requestPath.slice(1);
+    const normalized = requestPath.replace(/\\/g, '/');
+    if (normalized.includes('/../') || normalized.endsWith('/..') || normalized.startsWith('../') || normalized === '..') {
+        return null;
+    }
+    const relativePath = normalized === '/' ? 'index.html' : normalized.replace(/^\/+/, '');
+    if (!relativePath) return null;
     const filePath = path.resolve(rootDirectory, relativePath);
     if (!isPathInside(rootDirectory, filePath)) return null;
 
